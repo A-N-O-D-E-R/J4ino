@@ -1,0 +1,40 @@
+# Java
+*.class
+*.war
+*.ear
+target/
+*.log
+
+# Native libraries in root (build outputs)
+/*.so
+/*.dll
+/*.dylib
+build/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.eclipse/
+.settings/
+
+# Maven
+.mvn/
+dependency-reduced-pom.xml
+Dockerfile.build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep embedded resources
+!src/main/resources/native/**/*.so
+!src/main/resources/native/**/*.dll
+!src/main/resources/native/**/*.dylib
+!src/main/resources/arduino-cli/**/arduino-cli
+!src/main/resources/arduino-cli/**/arduino-cli.exe
+
+# Allow JAR distribution
+!j4ino*.jar
+
+
