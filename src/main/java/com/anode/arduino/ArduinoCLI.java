@@ -97,7 +97,7 @@ public class ArduinoCLI {
      * @param fqbn Fully Qualified Board Name (e.g., "arduino:avr:uno")
      */
     public String compile(String sketchPath, String fqbn) {
-        return ArduinoCLINative.compile(arduinoCliPath + " compile --fqbn " + fqbn + " " + sketchPath, fqbn);
+        return ArduinoCLINative.compile(sketchPath, fqbn);
     }
 
     /**
@@ -107,7 +107,17 @@ public class ArduinoCLI {
      * @param port Serial port (e.g., "/dev/ttyACM0", "COM3")
      */
     public String upload(String sketchPath, String fqbn, String port) {
-        return ArduinoCLINative.upload(arduinoCliPath + " upload -p " + port + " --fqbn " + fqbn + " " + sketchPath, fqbn, port);
+        return ArduinoCLINative.upload(sketchPath, fqbn, port);
+    }
+
+    /**
+     * Upload pre-compiled hex file to board
+     * @param hexFilePath Path to the .hex file
+     * @param fqbn Fully Qualified Board Name
+     * @param port Serial port (e.g., "/dev/ttyACM0", "COM3")
+     */
+    public String uploadHex(String hexFilePath, String fqbn, String port) {
+        return exec("upload -p " + port + " --fqbn " + fqbn + " --input-file " + hexFilePath);
     }
 
     /**
