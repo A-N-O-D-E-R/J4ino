@@ -12,7 +12,7 @@
 
     <name>J4ino - Java Arduino CLI Wrapper</name>
     <description>Fully embedded JNI wrapper for arduino-cli with zero external dependencies</description>
-    <url>https://github.com/yourusername/j4ino</url>
+    <url>https://github.com/A-N-O-D-E-R/J4ino</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +20,20 @@
         <make.executable>make</make.executable>
         <skipNativeBuild>false</skipNativeBuild>
     </properties>
+
+        <distributionManagement>
+        <repository>
+            <id>b2-releases</id>
+            <name>B2 Releases Repository</name>
+            <url>b2://A-N-O-D-E-R/maven-releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>b2-snapshots</id>
+            <name>B2 Snapshots Repository</name>
+            <url>b2://A-N-O-D-E-R/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <resources>
@@ -144,6 +158,13 @@
                 </configuration>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>com.anode.maven.wagon</groupId>
+                <artifactId>wagon-b2</artifactId>
+                <version>1.0.0</version>
+            </extension>
+        </extensions>
     </build>
 
     <profiles>
