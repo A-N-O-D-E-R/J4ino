@@ -42,20 +42,6 @@
         <skipNativeBuild>false</skipNativeBuild>
     </properties>
 
-        <distributionManagement>
-        <repository>
-            <id>b2-releases</id>
-            <name>B2 Releases Repository</name>
-            <url>b2://A-N-O-D-E-R/maven-releases</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>b2-snapshots</id>
-            <name>B2 Snapshots Repository</name>
-            <url>b2://A-N-O-D-E-R/maven-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <build>
         <resources>
             <resource>
@@ -212,13 +198,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>com.anode.maven.wagon</groupId>
-                <artifactId>wagon-b2</artifactId>
-                <version>1.0.0</version>
-            </extension>
-        </extensions>
     </build>
 
     <profiles>
