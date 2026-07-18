@@ -31,8 +31,10 @@ public class NativeLibraryLoader {
     }
 
     /**
-     * Extract arduino-cli binary from embedded resources
-     * @return Path to extracted arduino-cli binary
+     * Extract arduino-cli binary from embedded resources, or fall back to system PATH.
+     * Light JARs (without bundled arduino-cli) rely on the system PATH fallback.
+     *
+     * @return Path to the arduino-cli binary
      */
     public static Path getArduinoCLI() {
         if (extractedArduinoCLI != null && Files.exists(extractedArduinoCLI)) {
@@ -44,18 +46,39 @@ public class NativeLibraryLoader {
         String binaryName = platform.equals("windows") ? "arduino-cli.exe" : "arduino-cli";
         String resourcePath = "/arduino-cli/" + platform + "-" + arch + "/" + binaryName;
 
-        try {
-            extractedArduinoCLI = extractResource(resourcePath, binaryName);
-
-            // Make executable on Unix systems
-            if (!platform.equals("windows")) {
-                extractedArduinoCLI.toFile().setExecutable(true, false);
+        // Try bundled binary first (fat JAR)
+        if (NativeLibraryLoader.class.getResourceAsStream(resourcePath) != null) {
+            try {
+                extractedArduinoCLI = extractResource(resourcePath, binaryName);
+                if (!platform.equals("windows")) {
+                    extractedArduinoCLI.toFile().setExecutable(true, false);
+                }
+                return extractedArduinoCLI;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to extract bundled arduino-cli: " + e.getMessage(), e);
             }
-
-            return extractedArduinoCLI;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to extract arduino-cli: " + e.getMessage(), e);
         }
+
+        // Light JAR: resolve from system PATH
+        extractedArduinoCLI = resolveFromPath(binaryName);
+        if (extractedArduinoCLI == null) {
+            throw new RuntimeException(
+                "arduino-cli not bundled in this JAR and not found on system PATH. " +
+                "Install arduino-cli or use the fat JAR.");
+        }
+        return extractedArduinoCLI;
+    }
+
+    private static Path resolveFromPath(String binaryName) {
+        String pathEnv = System.getenv("PATH");
+        if (pathEnv == null) return null;
+        for (String dir : pathEnv.split(File.pathSeparator)) {
+            Path candidate = Paths.get(dir, binaryName);
+            if (Files.isExecutable(candidate)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     /**

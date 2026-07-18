@@ -157,6 +157,39 @@
                     <argLine>--enable-native-access=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
+
+            <!-- Assembly Plugin - Produce per-arch light JARs (no arduino-cli binary) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>light-jars</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>true</appendAssemblyId>
+                            <attach>true</attach>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.anode.arduino.Example</mainClass>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                            </archive>
+                            <descriptors>
+                                <descriptor>src/assembly/linux-x86_64.xml</descriptor>
+                                <descriptor>src/assembly/linux-aarch64.xml</descriptor>
+                                <descriptor>src/assembly/macos-x86_64.xml</descriptor>
+                                <descriptor>src/assembly/macos-aarch64.xml</descriptor>
+                                <descriptor>src/assembly/windows-x86_64.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <extensions>
             <extension>
